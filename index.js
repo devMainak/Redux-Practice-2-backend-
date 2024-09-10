@@ -57,8 +57,8 @@ app.post(`/movies/:movieId`, async (req, res) => {
   }
 });
 
-app.delete(`/movies/:movieId`, async (req, res) => {
-  const movieId = req.params.movieid;
+app.delete(`/movies/:id`, async (req, res) => {
+  const movieId = req.params.id;
 
   try {
     const deletedMovie = await Movie.findByIdAndDelete(movieId);
