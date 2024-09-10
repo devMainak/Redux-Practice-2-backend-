@@ -27,10 +27,50 @@ app.get("/movies", async (req, res) => {
 });
 
 app.post("/movies", async (req, res) => {
+  const movie = req.body;
+
   try {
-    const newMovie = new Movies(req.body);
+    const newMovie = new Movies(movie);
     await newMovie.save();
     res.status(201).json(newMovie);
+  } catch (error) {
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+app.post(`/movies/:movieId`, async (req, res) => {
+  const movieId = req.params.movieId;
+  const movie = req.body;
+
+  try {
+    const updatedMovie = await Movies.findByIdAndUpdate(movieId, movie);
+
+    if (!updatedMovie) {
+      res.status(404).json({ error: "Movie not found" });
+    } else {
+      res
+        .status(200)
+        .json({ message: "Movie updated successfully", movie: updatedMovie });
+    }
+  } catch (error) {
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+app.delete(`/movies/:movieId`, async (req, res) => {
+  const movieId = req.params.id;
+
+  try {
+    const deletedMovie = await Movie.findByIdAndDelete(movieId);
+
+    if (!deletedMovie) {
+      return res.status(404).json({ error: "Movie not found" });
+    }
+
+    res.status(200).json({
+      message: "Movie deleted successfully",
+      movie: deletedMovie,
+    });
   } catch (error) {
     res.status(500).json({ error: "Internal server error" });
   }
