@@ -61,7 +61,7 @@ app.delete(`/movies/:id`, async (req, res) => {
   const movieId = req.params.id;
 
   try {
-    const deletedMovie = await Movie.findByIdAndDelete(movieId);
+    const deletedMovie = await Movies.findByIdAndDelete(movieId);
 
     if (!deletedMovie) {
       return res.status(404).json({ error: "Movie not found" });
